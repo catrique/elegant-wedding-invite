@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { MapPin, Gift } from "lucide-react";
-import floralBranch from "@/assets/floral-branch.png";
-import waxSeal from "@/assets/wax-seal.png";
+import floralBranch from "@/assets/flower2.png";
 
 const InvitationContent = () => {
   const handleLocationClick = () => {
@@ -12,7 +11,10 @@ const InvitationContent = () => {
   };
 
   const handleGiftListClick = () => {
-    window.open("https://sites.icasei.com.br/vanusaecaled/pages/36429653", "_blank");
+    window.open(
+      "https://sites.icasei.com.br/vanusaeCáled/pages/36429653",
+      "_blank"
+    );
   };
 
   return (
@@ -23,6 +25,15 @@ const InvitationContent = () => {
       transition={{ duration: 1 }}
       className="min-h-screen py-8 px-4 sm:px-6 relative overflow-hidden"
     >
+      <motion.img
+        src={floralBranch}
+        alt=""
+        initial={{ opacity: 0, x: -50, y: 50 }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        transition={{ duration: 1, delay: 0.2 }}
+        className="absolute top-4 left-12 w-52 sm:w-74 md:w-80 lg:w-96 object-contain pointer-events-none z-0 opacity-80 -scale-x-100 rotate-180"
+      />
+
       {/* Decorative Floral Branches - Only at corners */}
       <motion.img
         src={floralBranch}
@@ -30,15 +41,7 @@ const InvitationContent = () => {
         initial={{ opacity: 0, x: 50, y: -50 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1, delay: 0.2 }}
-        className="absolute top-4 right-4 w-32 sm:w-40 md:w-48 object-contain pointer-events-none z-0 opacity-70"
-      />
-      <motion.img
-        src={floralBranch}
-        alt=""
-        initial={{ opacity: 0, x: -50, y: 50 }}
-        animate={{ opacity: 1, x: 0, y: 0 }}
-        transition={{ duration: 1, delay: 0.2 }}
-        className="absolute bottom-4 left-4 w-32 sm:w-40 md:w-48 object-contain pointer-events-none z-0 opacity-70 -scale-x-100 rotate-180"
+        className="absolute bottom-10 right-2F w-52 sm:w-74 md:w-80 lg:w-96 object-contain pointer-events-none z-0 opacity-80"
       />
 
       {/* Main Content Card */}
@@ -46,7 +49,7 @@ const InvitationContent = () => {
         {/* Multiple layered shadows for realistic floating effect */}
         <div className="absolute inset-0 bg-foreground/12 blur-3xl transform translate-y-10 scale-95 rounded-lg" />
         <div className="absolute inset-0 bg-foreground/8 blur-2xl transform translate-y-6 scale-97 rounded-lg" />
-        
+
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -59,21 +62,21 @@ const InvitationContent = () => {
               0 20px 50px -20px rgba(0,0,0,0.3),
               inset 0 2px 0 rgba(255,255,255,0.9),
               inset 0 -2px 5px rgba(0,0,0,0.05)
-            `
+            `,
           }}
         >
           {/* Paper texture overlay */}
-          <div 
+          <div
             className="absolute inset-0 rounded-lg opacity-15 pointer-events-none"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E")`
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E")`,
             }}
           />
-          
+
           {/* Golden Border - Double Line */}
           <div className="absolute inset-0 border-[3px] border-double border-primary/50 rounded-lg pointer-events-none" />
           <div className="absolute inset-3 border-[2px] border-primary/30 rounded-lg pointer-events-none" />
-          
+
           {/* Wax Seal - Centered at top */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: -20 }}
@@ -81,16 +84,10 @@ const InvitationContent = () => {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="absolute -top-8 sm:-top-10 left-1/2 -translate-x-1/2 w-16 h-16 sm:w-20 sm:h-20 z-20"
             style={{
-              filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.3))"
+              filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.3))",
             }}
-          >
-            <img 
-              src={waxSeal} 
-              alt=""
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-          
+          ></motion.div>
+
           {/* Inner Content */}
           <div className="relative pt-6 sm:pt-8 px-4 sm:px-6 md:px-8">
             {/* Bible Verse */}
@@ -133,7 +130,7 @@ const InvitationContent = () => {
                   e
                 </span>
                 <h1 className="font-script text-5xl sm:text-6xl md:text-7xl text-foreground">
-                  Caled
+                  Cáled
                 </h1>
               </div>
               <p className="text-base sm:text-lg text-foreground font-serif">
@@ -179,7 +176,8 @@ const InvitationContent = () => {
                   whileTap={{ scale: 0.95 }}
                   className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-bronze text-primary-foreground flex items-center justify-center transition-all focus:outline-none focus:ring-4 focus:ring-bronze/30"
                   style={{
-                    boxShadow: "0 10px 25px -8px rgba(0,0,0,0.4), 0 5px 15px -5px rgba(0,0,0,0.3)"
+                    boxShadow:
+                      "0 10px 25px -8px rgba(0,0,0,0.4), 0 5px 15px -5px rgba(0,0,0,0.3)",
                   }}
                   aria-label="Ver localização"
                 >
@@ -215,7 +213,8 @@ const InvitationContent = () => {
                 whileTap={{ scale: 0.95 }}
                 className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-bronze text-primary-foreground flex items-center justify-center transition-all mx-auto mb-4 focus:outline-none focus:ring-4 focus:ring-bronze/30"
                 style={{
-                  boxShadow: "0 10px 25px -8px rgba(0,0,0,0.4), 0 5px 15px -5px rgba(0,0,0,0.3)"
+                  boxShadow:
+                    "0 10px 25px -8px rgba(0,0,0,0.4), 0 5px 15px -5px rgba(0,0,0,0.3)",
                 }}
                 aria-label="Lista de presentes"
               >
