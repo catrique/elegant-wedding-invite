@@ -44,6 +44,8 @@ All colors MUST be HSL.
     --gold-light: 40 70% 55%;
     --olive: 75 30% 50%;
     --olive-light: 75 25% 60%;
+    --bronze: 30 40% 40%;
+    --bronze-light: 30 45% 50%;
     --cream: 40 40% 96%;
     --parchment: 40 30% 92%;
 
@@ -106,6 +108,8 @@ All colors MUST be HSL.
     --gold-light: 40 70% 55%;
     --olive: 75 30% 50%;
     --olive-light: 75 25% 60%;
+    --bronze: 30 40% 40%;
+    --bronze-light: 30 45% 50%;
     --cream: 0 0% 10%;
     --parchment: 0 0% 12%;
   }
