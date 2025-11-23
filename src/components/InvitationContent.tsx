@@ -74,7 +74,7 @@ const InvitationContent = () => {
             {/* Bible Verse */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: -10 }}
               transition={{ delay: 0.6, duration: 0.6 }}
               className="text-center mb-8 sm:mb-10"
             >
@@ -169,7 +169,7 @@ const InvitationContent = () => {
                     10h30 | IASD Catalão
                   </p>
                   <p className="text-sm sm:text-base text-muted-foreground font-serif leading-relaxed">
-                    Rua Marechal Castelo Branco, 361 - São José
+                    Rua Marechal Castelo Branco, 361 - São José, Divinópolis - MG
                   </p>
                   <p className="text-xs sm:text-sm text-muted-foreground font-serif mt-2 italic">
                     Toque no botão ao lado para ver a localização
@@ -184,7 +184,7 @@ const InvitationContent = () => {
             {/* Gift List Section with Bronze Icon */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: -20 }}
               transition={{ delay: 1.1, duration: 0.6 }}
               className="text-center"
             >
