@@ -62,7 +62,7 @@ const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
     setTimeout(() => {
       setLoadingSeal(false);
       onOpen();
-    }, 4000);
+    }, 2000);
   };
   return (
     <motion.div

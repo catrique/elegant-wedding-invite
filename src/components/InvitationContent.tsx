@@ -25,25 +25,6 @@ const InvitationContent = () => {
       transition={{ duration: 1 }}
       className="min-h-screen py-8 px-4 sm:px-6 relative overflow-hidden"
     >
-      <motion.img
-        src={floralBranch}
-        alt=""
-        initial={{ opacity: 0, x: -50, y: 50 }}
-        animate={{ opacity: 1, x: 0, y: 0 }}
-        transition={{ duration: 1, delay: 0.2 }}
-        className="absolute top-4 left-12 w-52 sm:w-74 md:w-80 lg:w-96 object-contain pointer-events-none z-0 opacity-80 -scale-x-100 rotate-180"
-      />
-
-      {/* Decorative Floral Branches - Only at corners */}
-      <motion.img
-        src={floralBranch}
-        alt=""
-        initial={{ opacity: 0, x: 50, y: -50 }}
-        animate={{ opacity: 1, x: 0, y: 0 }}
-        transition={{ duration: 1, delay: 0.2 }}
-        className="absolute bottom-10 right-2F w-52 sm:w-74 md:w-80 lg:w-96 object-contain pointer-events-none z-0 opacity-80"
-      />
-
       {/* Main Content Card */}
       <div className="max-w-3xl mx-auto relative z-10">
         {/* Multiple layered shadows for realistic floating effect */}
@@ -237,7 +218,7 @@ const InvitationContent = () => {
           transition={{ delay: 1.3, duration: 0.6 }}
           className="text-center mt-8"
         >
-          <p className="text-muted-foreground font-serif italic text-sm sm:text-base">
+          <p className="text-muted-foreground font-serif italic text-lg sm:text-xl">
             Aguardamos você com muito carinho!
           </p>
         </motion.div>
