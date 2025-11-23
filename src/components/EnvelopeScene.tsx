@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
+import oliveBranch from "@/assets/olive-branch.png";
 
 interface EnvelopeSceneProps {
   onOpen: () => void;
@@ -8,65 +8,110 @@ interface EnvelopeSceneProps {
 const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className="flex flex-col items-center justify-center min-h-screen p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="flex flex-col items-center justify-center min-h-screen p-6 relative overflow-hidden"
     >
-      {/* Envelope Container */}
-      <div className="relative w-full max-w-md">
-        {/* Envelope Body */}
-        <div className="relative bg-parchment border-2 border-gold/30 rounded-lg shadow-2xl overflow-hidden">
-          {/* Decorative Top Flap */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-card/80 to-transparent pointer-events-none" />
-          
-          {/* Envelope Border Design */}
-          <div className="absolute inset-0 border-8 border-gold/10 rounded-lg pointer-events-none" />
-          
-          {/* Main Content Area */}
-          <div className="relative px-8 py-16 sm:px-12 sm:py-20">
-            {/* Decorative Corner Elements */}
-            <div className="absolute top-6 left-6 w-12 h-12 border-l-2 border-t-2 border-gold/30" />
-            <div className="absolute top-6 right-6 w-12 h-12 border-r-2 border-t-2 border-gold/30" />
-            <div className="absolute bottom-6 left-6 w-12 h-12 border-l-2 border-b-2 border-gold/30" />
-            <div className="absolute bottom-6 right-6 w-12 h-12 border-r-2 border-b-2 border-gold/30" />
-            
-            {/* Wax Seal */}
-            <motion.button
-              onClick={onOpen}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative mx-auto block w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-gold to-gold-light shadow-xl cursor-pointer border-4 border-gold-light/50 animation-pulse-soft focus:outline-none focus:ring-4 focus:ring-gold/50 transition-all"
-              aria-label="Abrir convite"
-            >
-              {/* Seal Inner Circle */}
-              <div className="absolute inset-2 rounded-full border-2 border-primary-foreground/20" />
-              
-              {/* Initials V&C */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-script text-4xl sm:text-5xl text-primary-foreground text-shadow-soft">
-                  V&C
-                </span>
-              </div>
-              
-              {/* Heart Icon */}
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
-                <Heart className="w-5 h-5 text-primary-foreground/80 fill-primary-foreground/80" />
-              </div>
-            </motion.button>
-          </div>
+      {/* Decorative Olive Branches */}
+      <motion.img
+        src={oliveBranch}
+        alt=""
+        initial={{ opacity: 0, x: 50, y: -50 }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        transition={{ duration: 1, delay: 0.3 }}
+        className="absolute top-4 right-4 w-32 sm:w-48 md:w-64 object-contain pointer-events-none"
+      />
+      <motion.img
+        src={oliveBranch}
+        alt=""
+        initial={{ opacity: 0, x: -50, y: 50 }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        transition={{ duration: 1, delay: 0.3 }}
+        className="absolute bottom-4 left-4 w-32 sm:w-48 md:w-64 object-contain pointer-events-none rotate-180"
+      />
+
+      {/* V&C Logo */}
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="mb-12 text-center"
+      >
+        <div className="flex items-center justify-center gap-2">
+          <span className="text-6xl sm:text-7xl md:text-8xl font-serif font-light text-foreground">V</span>
+          <span className="text-4xl sm:text-5xl md:text-6xl font-script text-primary">&amp;</span>
+          <span className="text-6xl sm:text-7xl md:text-8xl font-serif font-light text-foreground">C</span>
         </div>
-        
-        {/* Instruction Text */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="text-center mt-8 text-lg text-muted-foreground font-serif tracking-wide"
+      </motion.div>
+
+      {/* Envelope Container */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.5 }}
+        className="relative w-full max-w-lg"
+      >
+        {/* Realistic Envelope */}
+        <motion.button
+          onClick={onOpen}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="relative w-full aspect-[1.6/1] bg-gradient-to-br from-parchment to-card rounded-lg shadow-2xl cursor-pointer focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all overflow-hidden"
+          aria-label="Abrir convite"
         >
-          Toque na carta para abrir
-        </motion.p>
-      </div>
+          {/* Envelope Flap Shadow */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent pointer-events-none" />
+          
+          {/* Envelope Diagonal Lines */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <line x1="0" y1="0" x2="50" y2="40" stroke="#d4c5a9" strokeWidth="0.3" opacity="0.5" />
+            <line x1="100" y1="0" x2="50" y2="40" stroke="#d4c5a9" strokeWidth="0.3" opacity="0.5" />
+          </svg>
+
+          {/* Wax Seal */}
+          <motion.div
+            animate={{
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-olive to-olive-light shadow-lg border-4 border-olive/30 flex items-center justify-center"
+          >
+            {/* Olive Branch Icon in Seal */}
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              className="w-10 h-10 sm:w-12 sm:h-12 text-primary-foreground"
+              strokeWidth="1.5"
+            >
+              <path d="M12 2v20M12 2c-2 2-4 3-6 3M12 2c2 2 4 3 6 3M8 6c-1 1-2 2-3 2M16 6c1 1 2 2 3 2M9 10c-1 1-1.5 2-2 3M15 10c1 1 1.5 2 2 3" />
+            </svg>
+          </motion.div>
+
+          {/* Subtle Paper Texture */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlKSIgb3BhY2l0eT0iMC4wMyIvPjwvc3ZnPg==')] opacity-30 pointer-events-none" />
+        </motion.button>
+      </motion.div>
+
+      {/* Instruction Text */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+        className="text-center mt-10"
+      >
+        <p className="text-xl sm:text-2xl uppercase tracking-[0.3em] text-foreground font-serif font-light mb-2">
+          Toque na carta
+        </p>
+        <p className="text-base sm:text-lg uppercase tracking-[0.5em] text-muted-foreground font-serif font-light">
+          Para abrir
+        </p>
+      </motion.div>
     </motion.div>
   );
 };
