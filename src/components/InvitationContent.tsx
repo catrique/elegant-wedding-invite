@@ -12,7 +12,7 @@ const InvitationContent = () => {
 
   const handleGiftListClick = () => {
     window.open(
-      "https://sites.icasei.com.br/vanusaeCáled/pages/36429653",
+      "https://sites.icasei.com.br/vanusaecaled/pages/36429653",
       "_blank"
     );
   };
