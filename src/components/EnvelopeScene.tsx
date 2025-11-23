@@ -11,155 +11,54 @@ interface EnvelopeSceneProps {
 }
 
 const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const mediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
-
   useEffect(() => {
     const audio = getGlobalAudio();
     if (!audio) return;
     audio.volume = 0.65;
-    // Do not autoplay here; we'll try to play on user interaction (click)
   }, []);
 
-  const tryPlay = async () => {
-    const audio = getGlobalAudio();
-    if (!audio) return false;
-
-    // Ensure AudioContext is created and resumed on user gesture (fixes Safari/iOS and others)
-    try {
-      const AC = (window as any).AudioContext || (window as any).webkitAudioContext;
-      if (AC && !audioCtxRef.current) {
-        audioCtxRef.current = new AC();
-        try {
-          // create source and connect to destination
-          mediaSourceRef.current = audioCtxRef.current.createMediaElementSource(audio);
-          mediaSourceRef.current.connect(audioCtxRef.current.destination);
-        } catch (e) {
-          // createMediaElementSource may fail if already connected; ignore but log in dev
-          // console.debug('createMediaElementSource skipped', e);
-        }
-      }
-
-      if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
-        await audioCtxRef.current.resume();
-      }
-
-      // Try to play but don't let a hung promise block the UI indefinitely.
-      const playPromise = audio.play();
-
-      // If the browser returns a promise, race it against a short timeout so we never hang.
-      const result: any = await Promise.race([
-        Promise.resolve(playPromise)
-          .then(() => ({ status: "ok" }))
-          .catch((err) => ({ status: "error", err })),
-        new Promise((res) => setTimeout(() => res({ status: "timeout" }), 1500)),
-      ]);
-
-      if (result && result.status === "ok") return true;
-      if (result && result.status === "error") {
-        console.error("Audio playback failed:", result.err);
-        return false;
-      }
-
-      // timeout case
-      console.warn("Audio.play() did not resolve quickly (timed out)");
-      return false;
-    } catch (err) {
-      console.error("tryPlay unexpected error:", err);
-      return false;
-    }
-  };
   const [loadingSeal, setLoadingSeal] = useState(false);
   const [playError, setPlayError] = useState<string | null>(null);
   const [playingStarted, setPlayingStarted] = useState(false);
 
   const onSealClick = async () => {
+    // Prevent multiple rapid calls from different events (e.g., onTouchStart and onClick)
+    if (loadingSeal) return;
+
     setLoadingSeal(true);
 
-    // Kick off immediate, synchronous play to ensure the browser considers
-    // this a user gesture. Do not await this call here — just try to start.
-    try {
-      const audio = getGlobalAudio();
-      if (audio) {
-        console.debug("onSealClick: audio element:", {
-          src: audio.src,
-          paused: audio.paused,
-          readyState: audio.readyState,
-        });
-        try {
-          (audio as any).playsInline = true;
-          audio.setAttribute?.("playsinline", "");
-        } catch {}
-        audio.muted = false;
+    // On mobile, audio must be initiated from a user gesture.
+    // The most reliable way is to create a new Audio element and play it.
+    const existingAudio = getGlobalAudio();
+    if (existingAudio && !existingAudio.paused) {
+      // Music is already playing, just proceed.
+      setPlayingStarted(true);
+    } else {
+      try {
+        const audio = new Audio(bgMusic);
+        audio.loop = true;
         audio.volume = 0.65;
-        // start playing synchronously (best chance for user gesture acceptance)
-        const playResult = audio.play();
-        if (playResult && typeof (playResult as any).then === "function") {
-          (playResult as any)
-            .then(() => {
-              console.debug("audio.play() resolved (sync start)");
-              setPlayingStarted(true);
-              setPlayError(null);
-            })
-            .catch(async (err: any) => {
-              console.error("audio.play() rejected (sync start):", err);
-              setPlayError(String(err?.message || err));
-              setPlayingStarted(false);
+        // These help with iOS playback
+        audio.setAttribute("playsinline", "true");
+        (audio as any).playsInline = true;
 
-              // fallback: try creating a fresh audio element within the same user gesture
-              try {
-                const temp = new Audio(bgMusic as unknown as string);
-                try {
-                  temp.crossOrigin = "anonymous";
-                } catch {}
-                try {
-                  (temp as any).playsInline = true;
-                  temp.setAttribute?.("playsinline", "");
-                } catch {}
-                temp.loop = true;
-                temp.preload = "auto";
-                temp.volume = 0.65;
-                try {
-                  temp.load();
-                } catch {}
-                const tempPlay = temp.play();
-                if (tempPlay && typeof (tempPlay as any).then === "function") {
-                  await tempPlay;
-                }
-                // if succeeded, use this audio as the global singleton
-                setGlobalAudio(temp);
-                setPlayingStarted(true);
-                setPlayError(null);
-                console.debug("Fallback temp audio played and set as global");
-              } catch (e2) {
-                console.error("Fallback temp audio also failed:", e2);
-                setPlayError(String((e2 as any)?.message || e2));
-                setPlayingStarted(false);
-              }
-            });
-        } else {
-          // playResult may be undefined in very old browsers; check state
-          setTimeout(() => {
-            setPlayingStarted(!audio.paused);
-            if (audio.paused) setPlayError("Playback did not start");
-          }, 200);
-        }
+        // The play() method returns a promise. We'll await it.
+        await audio.play();
+
+        // If successful, set this as our global audio instance.
+        setGlobalAudio(audio);
+        setPlayingStarted(true);
+        setPlayError(null);
+        console.log("Audio playback started successfully.");
+      } catch (err) {
+        console.error("Audio playback failed:", err);
+        setPlayError(String((err as any)?.message || "Erro desconhecido"));
+        setPlayingStarted(false);
       }
-    } catch (err) {
-      console.error("audio.play() threw (sync start):", err);
-      setPlayError(String((err as any)?.message || err));
-      setPlayingStarted(false);
     }
 
-    // In background, ensure AudioContext/resume/connect is attempted.
-    tryPlay().then((ok) => {
-      if (!ok) {
-        console.warn("tryPlay() could not fully initialize audio context");
-      }
-    });
-
-    // Always proceed after 4s (show overlay for exactly 4s) — do not gate navigation
-    // strictly on tryPlay success so the user isn't stuck.
+    // Proceed with the UI transition after a delay, regardless of audio success.
+    // This ensures the user is never stuck.
     setTimeout(() => {
       setLoadingSeal(false);
       onOpen();
@@ -264,14 +163,6 @@ const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
         transition={{ duration: 0.8, delay: 0.5 }}
         onClick={() => {
           // show the same loading overlay and start audio when clicking the envelope
-          onSealClick();
-        }}
-        onPointerDown={() => {
-          // ensure touch/pointer interactions also trigger the same flow
-          onSealClick();
-        }}
-        onTouchStart={() => {
-          // some mobile browsers rely on touchstart
           onSealClick();
         }}
         role="button"
