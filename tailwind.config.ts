@@ -65,6 +65,10 @@ export default {
           DEFAULT: "hsl(var(--olive))",
           light: "hsl(var(--olive-light))",
         },
+        bronze: {
+          DEFAULT: "hsl(var(--bronze))",
+          light: "hsl(var(--bronze-light))",
+        },
         cream: "hsl(var(--cream))",
         parchment: "hsl(var(--parchment))",
       },
