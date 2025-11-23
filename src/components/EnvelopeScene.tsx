@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { Heart } from "lucide-react";
 import floralBranch from "@/assets/flower1.png";
 import waxSeal from "@/assets/selo.png";
-import { getGlobalAudio } from "@/lib/globalAudio";
+import { getGlobalAudio, setGlobalAudio } from "@/lib/globalAudio";
+import bgMusic from "@/assets/ELES SE AMAM - Vocal Livre - Violino Cover.mp3";
 
 interface EnvelopeSceneProps {
   onOpen: () => void;
@@ -69,17 +70,99 @@ const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
     }
   };
   const [loadingSeal, setLoadingSeal] = useState(false);
+  const [playError, setPlayError] = useState<string | null>(null);
+  const [playingStarted, setPlayingStarted] = useState(false);
 
   const onSealClick = async () => {
     setLoadingSeal(true);
-    const ok = await tryPlay();
-    // keep the loading visible exactly 4 seconds, then proceed
+
+    // Kick off immediate, synchronous play to ensure the browser considers
+    // this a user gesture. Do not await this call here — just try to start.
+    try {
+      const audio = getGlobalAudio();
+      if (audio) {
+        console.debug("onSealClick: audio element:", {
+          src: audio.src,
+          paused: audio.paused,
+          readyState: audio.readyState,
+        });
+        try {
+          (audio as any).playsInline = true;
+          audio.setAttribute?.("playsinline", "");
+        } catch {}
+        audio.muted = false;
+        audio.volume = 0.65;
+        // start playing synchronously (best chance for user gesture acceptance)
+        const playResult = audio.play();
+        if (playResult && typeof (playResult as any).then === "function") {
+          (playResult as any)
+            .then(() => {
+              console.debug("audio.play() resolved (sync start)");
+              setPlayingStarted(true);
+              setPlayError(null);
+            })
+            .catch(async (err: any) => {
+              console.error("audio.play() rejected (sync start):", err);
+              setPlayError(String(err?.message || err));
+              setPlayingStarted(false);
+
+              // fallback: try creating a fresh audio element within the same user gesture
+              try {
+                const temp = new Audio(bgMusic as unknown as string);
+                try {
+                  temp.crossOrigin = "anonymous";
+                } catch {}
+                try {
+                  (temp as any).playsInline = true;
+                  temp.setAttribute?.("playsinline", "");
+                } catch {}
+                temp.loop = true;
+                temp.preload = "auto";
+                temp.volume = 0.65;
+                try {
+                  temp.load();
+                } catch {}
+                const tempPlay = temp.play();
+                if (tempPlay && typeof (tempPlay as any).then === "function") {
+                  await tempPlay;
+                }
+                // if succeeded, use this audio as the global singleton
+                setGlobalAudio(temp);
+                setPlayingStarted(true);
+                setPlayError(null);
+                console.debug("Fallback temp audio played and set as global");
+              } catch (e2) {
+                console.error("Fallback temp audio also failed:", e2);
+                setPlayError(String((e2 as any)?.message || e2));
+                setPlayingStarted(false);
+              }
+            });
+        } else {
+          // playResult may be undefined in very old browsers; check state
+          setTimeout(() => {
+            setPlayingStarted(!audio.paused);
+            if (audio.paused) setPlayError("Playback did not start");
+          }, 200);
+        }
+      }
+    } catch (err) {
+      console.error("audio.play() threw (sync start):", err);
+      setPlayError(String((err as any)?.message || err));
+      setPlayingStarted(false);
+    }
+
+    // In background, ensure AudioContext/resume/connect is attempted.
+    tryPlay().then((ok) => {
+      if (!ok) {
+        console.warn("tryPlay() could not fully initialize audio context");
+      }
+    });
+
+    // Always proceed after 4s (show overlay for exactly 4s) — do not gate navigation
+    // strictly on tryPlay success so the user isn't stuck.
     setTimeout(() => {
       setLoadingSeal(false);
-      if (ok) {
-        // after the 4s delay, open the invitation
-        onOpen();
-      }
+      onOpen();
     }, 4000);
   };
   return (
@@ -105,6 +188,12 @@ const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
             <div className="text-white uppercase tracking-widest font-semibold text-xl sm:text-2xl">
               Aumente o som
             </div>
+            {playingStarted && (
+              <div className="mt-3 text-emerald-300 font-medium">Música iniciada</div>
+            )}
+            {playError && (
+              <div className="mt-3 text-rose-300 font-medium">Falha ao tocar: {playError}</div>
+            )}
           </div>
         </div>
       )}
