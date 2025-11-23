@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { MapPin, Gift } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import oliveBranch from "@/assets/olive-branch.png";
+import oliveBranchRight from "@/assets/olive-branch-right.png";
+import oliveBranchLeft from "@/assets/olive-branch-left.png";
 
 const InvitationContent = () => {
   const handleLocationClick = () => {
@@ -25,32 +25,42 @@ const InvitationContent = () => {
     >
       {/* Decorative Olive Branches */}
       <motion.img
-        src={oliveBranch}
+        src={oliveBranchRight}
         alt=""
         initial={{ opacity: 0, x: 50, y: -50 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1, delay: 0.2 }}
-        className="absolute top-0 right-0 w-32 sm:w-48 md:w-64 object-contain pointer-events-none z-0"
+        className="absolute top-0 right-0 w-32 sm:w-40 md:w-48 object-contain pointer-events-none z-0"
       />
       <motion.img
-        src={oliveBranch}
+        src={oliveBranchLeft}
         alt=""
         initial={{ opacity: 0, x: -50, y: 50 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1, delay: 0.2 }}
-        className="absolute bottom-0 left-0 w-32 sm:w-48 md:w-64 object-contain pointer-events-none rotate-180 z-0"
+        className="absolute bottom-0 left-0 w-32 sm:w-40 md:w-48 object-contain pointer-events-none z-0"
       />
 
-      {/* Main Content with Border */}
+      {/* Main Content with Floating Shadow */}
       <div className="max-w-3xl mx-auto relative z-10">
+        {/* Floating Shadow for Depth */}
+        <div className="absolute inset-0 bg-foreground/10 blur-3xl transform translate-y-8 scale-95 rounded-lg" />
+        
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="bg-card/80 backdrop-blur-sm rounded-lg border-4 border-double border-primary/40 shadow-2xl p-6 sm:p-10 md:p-12"
+          className="relative bg-card/90 backdrop-blur-sm rounded-lg shadow-[0_25px_70px_-20px_rgba(0,0,0,0.3)] p-6 sm:p-10 md:p-12"
+          style={{
+            boxShadow: "0 25px 70px -20px rgba(0,0,0,0.3), 0 10px 40px -15px rgba(0,0,0,0.2)"
+          }}
         >
-          {/* Inner Border */}
-          <div className="border-2 border-primary/30 rounded p-6 sm:p-8 md:p-10">
+          {/* Golden Border - Double Line */}
+          <div className="absolute inset-0 border-[3px] border-double border-primary/50 rounded-lg pointer-events-none" />
+          <div className="absolute inset-3 border-[2px] border-primary/30 rounded-lg pointer-events-none" />
+          
+          {/* Inner Content */}
+          <div className="relative p-6 sm:p-8 md:p-10">
             {/* Bible Verse */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -120,6 +130,9 @@ const InvitationContent = () => {
               </div>
             </motion.div>
 
+            {/* Golden Separator Line */}
+            <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-10" />
+
             {/* Location Section with Icon Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -130,9 +143,12 @@ const InvitationContent = () => {
               <div className="flex items-start gap-4 max-w-xl mx-auto">
                 <motion.button
                   onClick={handleLocationClick}
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-olive text-primary-foreground flex items-center justify-center shadow-lg hover:shadow-xl transition-all focus:outline-none focus:ring-4 focus:ring-olive/30"
+                  style={{
+                    boxShadow: "0 8px 20px -6px rgba(0,0,0,0.3)"
+                  }}
                   aria-label="Ver localização"
                 >
                   <MapPin className="w-6 h-6 sm:w-7 sm:h-7" />
@@ -151,18 +167,24 @@ const InvitationContent = () => {
               </div>
             </motion.div>
 
+            {/* Golden Separator Line */}
+            <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent mb-10" />
+
             {/* Gift List Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.6 }}
-              className="text-center pt-8 border-t-2 border-primary/20"
+              className="text-center"
             >
               <motion.button
                 onClick={handleGiftListClick}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-olive text-primary-foreground flex items-center justify-center shadow-lg hover:shadow-xl transition-all mx-auto mb-4 focus:outline-none focus:ring-4 focus:ring-olive/30"
+                style={{
+                  boxShadow: "0 8px 20px -6px rgba(0,0,0,0.3)"
+                }}
                 aria-label="Lista de presentes"
               >
                 <Gift className="w-6 h-6 sm:w-7 sm:h-7 fill-current" />

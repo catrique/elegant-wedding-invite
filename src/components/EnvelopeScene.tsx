@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import oliveBranch from "@/assets/olive-branch.png";
+import oliveBranchRight from "@/assets/olive-branch-right.png";
+import oliveBranchLeft from "@/assets/olive-branch-left.png";
+import waxSeal from "@/assets/wax-seal.png";
 
 interface EnvelopeSceneProps {
   onOpen: () => void;
@@ -15,20 +17,20 @@ const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
     >
       {/* Decorative Olive Branches */}
       <motion.img
-        src={oliveBranch}
+        src={oliveBranchRight}
         alt=""
         initial={{ opacity: 0, x: 50, y: -50 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1, delay: 0.3 }}
-        className="absolute top-4 right-4 w-32 sm:w-48 md:w-64 object-contain pointer-events-none"
+        className="absolute top-4 right-4 w-32 sm:w-40 md:w-48 object-contain pointer-events-none"
       />
       <motion.img
-        src={oliveBranch}
+        src={oliveBranchLeft}
         alt=""
         initial={{ opacity: 0, x: -50, y: 50 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1, delay: 0.3 }}
-        className="absolute bottom-4 left-4 w-32 sm:w-48 md:w-64 object-contain pointer-events-none rotate-180"
+        className="absolute bottom-4 left-4 w-32 sm:w-40 md:w-48 object-contain pointer-events-none"
       />
 
       {/* V&C Logo */}
@@ -45,21 +47,25 @@ const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
         </div>
       </motion.div>
 
-      {/* Envelope Container */}
+      {/* Envelope Container with Floating Effect */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5 }}
         className="relative w-full max-w-lg"
       >
-        {/* Realistic Envelope */}
-        <motion.button
-          onClick={onOpen}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="relative w-full aspect-[1.6/1] bg-gradient-to-br from-parchment to-card rounded-lg shadow-2xl cursor-pointer focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all overflow-hidden"
-          aria-label="Abrir convite"
+        {/* Floating Shadow */}
+        <div className="absolute inset-0 bg-foreground/10 blur-2xl transform translate-y-6 scale-95 rounded-lg" />
+        
+        {/* Realistic Envelope with Depth */}
+        <motion.div
+          whileHover={{ y: -5, transition: { duration: 0.3 } }}
+          className="relative w-full aspect-[1.6/1] bg-gradient-to-br from-parchment to-card rounded-lg shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] cursor-pointer overflow-hidden"
         >
+          {/* Golden Border Lines */}
+          <div className="absolute inset-4 border-2 border-primary/30 rounded pointer-events-none" />
+          <div className="absolute inset-6 border border-primary/20 rounded pointer-events-none" />
+          
           {/* Envelope Flap Shadow */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent pointer-events-none" />
           
@@ -69,8 +75,11 @@ const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
             <line x1="100" y1="0" x2="50" y2="40" stroke="#d4c5a9" strokeWidth="0.3" opacity="0.5" />
           </svg>
 
-          {/* Wax Seal */}
-          <motion.div
+          {/* Wax Seal - Centered */}
+          <motion.button
+            onClick={onOpen}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
             animate={{
               scale: [1, 1.05, 1],
             }}
@@ -79,23 +88,19 @@ const EnvelopeScene = ({ onOpen }: EnvelopeSceneProps) => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-olive to-olive-light shadow-lg border-4 border-olive/30 flex items-center justify-center"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 focus:outline-none focus:ring-4 focus:ring-primary/30 rounded-full transition-all"
+            aria-label="Abrir convite"
           >
-            {/* Olive Branch Icon in Seal */}
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              className="w-10 h-10 sm:w-12 sm:h-12 text-primary-foreground"
-              strokeWidth="1.5"
-            >
-              <path d="M12 2v20M12 2c-2 2-4 3-6 3M12 2c2 2 4 3 6 3M8 6c-1 1-2 2-3 2M16 6c1 1 2 2 3 2M9 10c-1 1-1.5 2-2 3M15 10c1 1 1.5 2 2 3" />
-            </svg>
-          </motion.div>
+            <img 
+              src={waxSeal} 
+              alt="Selo de cera"
+              className="w-full h-full object-contain drop-shadow-xl"
+            />
+          </motion.button>
 
           {/* Subtle Paper Texture */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlKSIgb3BhY2l0eT0iMC4wMyIvPjwvc3ZnPg==')] opacity-30 pointer-events-none" />
-        </motion.button>
+        </motion.div>
       </motion.div>
 
       {/* Instruction Text */}
